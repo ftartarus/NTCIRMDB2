@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block title %} User Info  {% endblock %}
+
+{% block content %}
+    <div class="row text-center">
+        <h3>
+            User Profile
+        </h3>
+    </div>
+    <div class="row">
+    <div class="col-xs-offset-3 col-xs-6 user_info">
+        <div class="user_info_row row">
+            <div class="info_label col-xs-offset-0 col-xs-6">
+                Username:
+            </div>
+            <div class="info_value col-xs-offest-6 col-xs-6">
+                {{ cur_user.username }}
+            </div>
+        </div>
+        <div class="user_info_row row">
+            <div class="info_label col-xs-offset-0 col-xs-6">
+                Email:
+            </div>
+            <div class="info_value col-xs-offest-6 col-xs-6">
+                {{ cur_user.email }}
+            </div>
+        </div>
+        <div class="user_info_row row">
+            <div class="info_label col-xs-offset-0 col-xs-6">
+                Gender:
+            </div>
+            <div class="info_value col-xs-offest-6 col-xs-6">
+                {{ cur_user.sex }}
+            </div>
+        </div>
+        <div class="user_info_row row">
+            <div class="info_label col-xs-offset-0 col-xs-6">
+                Age:
+            </div>
+            <div class="info_value col-xs-offest-6 col-xs-6">
+                {{ cur_user.age }}
+            </div>
+        </div>
+
+        <div class="user_info_row row">
+            <div class="info_label col-xs-offset-0 col-xs-6">
+                Registration Date:
+            </div>
+            <div class="info_value col-xs-offest-6 col-xs-6">
+                {{ cur_user.signup_time }}
+            </div>
+        </div>
+
+        <div class="user_info_row row">
+            <div class="info_label col-xs-offset-0 col-xs-6">
+                Last login time:
+            </div>
+            <div class="info_value col-xs-offest-6 col-xs-6">
+                {{ cur_user.last_login }}
+            </div>
+        </div>
+        <div class="user_info_row row">
+            <div class="info_label col-xs-offset-0 col-xs-6">
+                Login times:
+            </div>
+            <div class="info_value col-xs-offest-6 col-xs-6">
+                {{ cur_user.login_num }}
+            </div>
+        </div>
+        <div class="user_info_row row">
+            <div class="info_label col-xs-offset-0 col-xs-6">
+                User Previllage:
+            </div>
+            <div class="info_value col-xs-offest-6 col-xs-6">
+                {{ user_group_string }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6">
+                <a href="/user/edit_info/" class="btn btn-block btn-lg btn-primary">Edit Personal Information</a>
+            </div>
+            <div class="col-xs-6">
+                <a href="/user/edit_password/" class="btn btn-block btn-lg btn-primary">Modify Password</a>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+{% endblock %}
+
+

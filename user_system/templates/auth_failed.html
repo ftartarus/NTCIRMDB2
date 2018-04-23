@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %} User Information  {% endblock %}
+
+{% block content %}
+    <div class="row text-center">
+        <h3>
+           Insufficient Previlege
+        </h3>
+    </div>
+    <div class="row">
+    <div class="col-xs-offset-3 col-xs-6 user_info">
+        <div class="user_info_row row">
+            <div class="info_label col-xs-offset-0 col-xs-6">
+                Username:
+            </div>
+            <div class="info_value col-xs-offest-6 col-xs-6">
+                {{ cur_user.username }}
+            </div>
+        </div>
+
+        <div class="user_info_row row">
+            <div class="info_label col-xs-offset-0 col-xs-6">
+                Need Previlege:
+            </div>
+            <div class="info_value col-xs-offest-6 col-xs-6">
+                {{ missing_group_string }}
+            </div>
+        </div>
+
+        <div class="user_info_row row">
+            <div class="info_label col-xs-offset-0 col-xs-6">
+                User current previlege:
+            </div>
+            <div class="info_value col-xs-offest-6 col-xs-6">
+                {{ user_group_string }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-offset-3 col-xs-6">
+                <a href="/user/login/" class="btn btn-block btn-lg btn-primary">Switch User</a>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+{% endblock %}
+
+

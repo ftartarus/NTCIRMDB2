@@ -1,0 +1,348 @@
+{% extends "base.html" %}
+{% block title %} Relevance Assessment  {% endblock %}
+
+
+{% block content %}
+
+    <div id="backdoor"  class="{{ fnum }}/{{ lnum }}/{{ count }}">
+    </div>
+<div class="container">
+    <div class="row clearfix">
+    	<br>
+    	</br>
+    </div>
+	<div class="row clearfix">
+        <div class="col-md-1 column">
+			 <button type="button" class="btn btn-default btn-block" onclick="back()">BACK</button>
+		</div>
+		<div class="col-md-9 column" style="text-align: center;">
+             	<select onchange="jp()" id="topic"  style="font-family:Verdana, Arial, Helvetica, sans-serif;text-indent:300px;height: 40px; width:800px">
+                    {% for m in mark %}
+                    <option value="{{ m.2 }}">{{ m.0 }}. {{ m.1 }}</option>
+                    {% endfor %}
+                </select>
+
+		</div>
+		<div class="col-md-1 column">
+			 <button type="button" class="btn btn-default btn-block" onclick="toP()" {% if listnum == 1 %} style="background-color: red" {% endif %} >PREV</button>
+		</div>
+		<div class="col-md-1 column">
+			 <button type="button" class="btn btn-default btn-block" onclick="toN()" {% if listnum == lnum %} style="background-color: red" {% endif %} >NEXT</button>
+		</div>
+	</div>
+	<div class="row clearfix">
+        <br>
+        </br>
+    </div>
+	<div class="row clearfix">
+		<div class="col-md-4 column"  id="t" style="height:0px; padding-bottom:64%; border: 1px solid; overflow-y: auto">
+		  <table class="table table-hover">
+			 <tbody id="table">
+             {% for d in doclist %}
+             <tr>
+
+                 <td  id="{{ d.0 }}" class="" style="">
+
+                         <span style="color: {{ d.3 }};height:30px;text-align: center; width: 100px; font-size: 20px;">{{ d.2 }}</span>
+
+                 </td>
+                 <td ><input type="button" value="{{ d.1 }}" class="btn btn-default btn-block"></td>
+             </tr>
+             {% endfor %}
+             </tbody>
+          </table>
+		</div>
+		<div class="col-md-8 column">
+			<div class="row clearfix">
+				<div class="col-md-12 column" >
+                    <iframe src="" id="txt" width="800" height="700" security="restricted" sandbox=""></iframe>
+				</div>
+			</div>
+			<div class="row clearfix">
+                <form id="evalution_form" name="evalution_form"  action="" method="post">
+                    {% csrf_token %}
+				<div class="col-md-3 column">
+					 <input  type="button" style="border:2px solid darkgray" class="btn btn-lg btn-block" name="taskevalution" value="NONREL: {{ nonrelnum }}" id="Red" onclick="GetValue_N()">
+				</div>
+				<div class="col-md-3 column">
+					 <input type="button" style="border:2px solid darkgray" class="btn btn-lg btn-block" name="taskevalution" value="REL: {{ relnum }}" id="Green" onclick="GetValue_R()">
+				</div>
+				<div class="col-md-3 column">
+					 <input type="button" style="border:2px solid darkgray" class="btn btn-lg btn-block" name="taskevalution" value="H.REL: {{ hrelnum }}" id="Blue" onclick="GetValue_H()">
+				</div>
+                    <div class="col-md-3 column">
+					 <input type="button" style="background-color: white; border: 2px solid darkgray;" class="btn btn-lg btn-block" name="taskevalution" value="ERROR: {{ errornum }}" id="Black" onclick="GetValue_E()">
+				</div>
+                </form>
+			</div>
+		</div>
+	</div>
+    <div class="row clearfix">
+        <div class="col-md-5 column" id="comp">
+        <p>completed: {{ completed }}/{{ totalnum }}</p>
+        </div>
+       <!-- <div class="col-md-7 column">
+            <div class="col-md-4 column" id="nonrelnum" style="text-align: center;">
+            <p>NONREL: {{ nonrelnum }}</p>
+            </div>
+            <div class="col-md-4 column" id="relnum" style="text-align: center;">
+            <p>REL: {{ relnum }}</p>
+            </div>
+            <div class="col-md-4 column" id="hrelnum" style="text-align: center;">
+            <p>H.REL: {{ hrelnum }}</p>
+            </div>
+        </div>-->
+    </div>
+
+</div>
+
+
+{% endblock %}
+{% block scripts %}
+    <style>
+    #Red{color:#FF0000}
+    #Blue{color:#0000FF}
+    #Green{color:#009900}
+    #Black{color:black}
+    .Red{color:#FF0000}
+    .Blue{color:#0000FF}
+    .Green{color:#009900}
+    .Black{color:black}
+    .act{background: #edeff1;}
+    </style>
+<script type="text/javascript">
+$(function(){
+$('table tr').eq(0).addClass("act");
+ $('table tr').each(function(){
+  $(this).click(function(){
+    $(this).addClass("act").siblings().removeClass("act");
+   })
+ })
+});
+var tab = document.getElementById("table") ;
+
+
+
+//var rows = tab.rows.length ;
+//for(var j=1;j<=rows;j++){
+ //   var a=document.getElementById(j).innerText;
+  //  if (a == "NONREL"){
+   //     document.getElementById(j).className="Red";
+   // }
+   //  else   if (a == "REL"){
+   //     document.getElementById(j).className="Green";
+   // }
+   // else if (a == "H.REL"){
+   //      document.getElementById(j).className="Blue";
+   // }
+//}
+var rowIdx;
+$(function() {
+                  $("td").click(function() {
+                     rowIdx = $(this).parent()[0].rowIndex + 1;
+{#                       alert(rowIdx)#}
+                      });
+                        });
+                var showval=document.URL.split("/")[4];
+                document.getElementById("topic").value=showval;
+             $(function() {
+
+                   $("td").click(function () {
+                       var rowIdx = $(this).parent()[0].rowIndex + 1;
+                       $.ajax({
+                           url: "/idcon/",
+                           type:"GET",
+                           dataType:"json",
+                           data: {
+                               docid:rowIdx,
+                               topicid:showval
+                           },
+                           success: function (data) {
+
+                                   $("iframe").attr('src', data.asd);
+                                   <!--$("#txt").load(str(data.asd));-->
+
+                               window.onerror=function () {
+                                   document.getElementById(rowIdx).innerHTML = "ERROR";
+                                   document.getElementById(rowIdx).className = "Orange";
+                                   $("#" + (rowIdx + 1)).trigger("click");
+                                   window.location.hash = "#" + rowIdx
+                               }
+                           }
+                       })
+                   })
+               });
+
+         var list=document.URL.split("/");
+             var href="";
+             for(var i=0;i<list.length-2;i++){
+                 href+=list[i]+'/';
+             }
+            var backdoor=document.getElementById("backdoor").className;
+            var fnum=parseInt(backdoor.split("/")[0]);
+            var lnum=parseInt(backdoor.split("/")[1]);
+
+         function toP() {
+            var getval=parseInt(document.URL.split("/")[4])-1;
+
+            if (getval>=fnum){
+                window.location.href=href+getval;
+            }
+         }
+         function toN() {
+             var getval=parseInt(document.URL.split("/")[4])+1;
+             if(getval<=lnum){
+                 window.location.href=href+getval;
+             }
+         }
+         function back() {
+
+            window.location.href=href;
+         }
+         function jp() {
+             var obj=document.getElementById('topic');
+             var index=obj.selectedIndex+1;
+             window.location.href=href+index;
+         }
+
+<!--var usrid=document.URL.split("/")[3];-->
+        function GetValue_N(){
+
+            document.getElementById(rowIdx).innerHTML= "NONREL";
+            document.getElementById(rowIdx).className="Red";
+$(function() {
+                       $.ajax({
+                           url: "/sv/",
+                           async: false,
+                           dataType: "json",
+                           type:"GET",
+                           data: {
+                               docid:rowIdx,
+                               topicid:showval,
+                             <!--  usrid:usrid, -->
+                               val:"NONREL",
+                               color:"Red"
+                           },
+                           success: function (data) {
+                                $("#comp").html("completed: "+ data.completed +"/"+ data.totalnum);
+                              //  $("#nonrelnum").html("NONREL: "+data.nonrelnum);
+                              //  $("#relnum").html("REL: "+data.relnum);
+                              //  $("#hrelnum").html("H.REL: "+data.hrelnum);
+                                $("#Red").attr("value","NONREL: "+data.nonrelnum);
+                                $("#Green").attr("value","REL: "+data.relnum);
+                                $("#Blue").attr("value","H.REL: "+data.hrelnum);
+                                $("#Black").attr("value","ERROR: "+data.errornum);
+                                $("#"+(rowIdx+1)).trigger("click");
+                                window.location.hash="#"+rowIdx
+                           }
+                       })
+                   })
+
+				}
+        function GetValue_R(){
+
+            document.getElementById(rowIdx).innerHTML= "REL";
+            document.getElementById(rowIdx).className="Green";
+$(function() {
+                       $.ajax({
+                           url: "/sv/",
+                           async: false,
+                           dataType: "json",
+                           type:"GET",
+                           data: {
+                               docid:rowIdx,
+                               topicid:showval,
+                            <!--   usrid:usrid, -->
+                               val:"REL",
+                               color:"Green"
+                           },
+                           success: function (data) {
+$("#comp").html("completed: "+data.completed+"/"+data.totalnum);
+//$("#nonrelnum").html("NONREL: "+data.nonrelnum);
+//$("#relnum").html("REL: "+data.relnum);
+//$("#hrelnum").html("H.REL: "+data.hrelnum);
+                                $("#Red").attr("value","NONREL: "+data.nonrelnum);
+                                $("#Green").attr("value","REL: "+data.relnum);
+                                $("#Blue").attr("value","H.REL: "+data.hrelnum);
+                                $("#Black").attr("value","ERROR: "+data.errornum);
+                                $("#"+(rowIdx+1)).trigger("click");
+                                window.location.hash="#"+rowIdx
+                           }
+                       })
+                   })
+				}
+        function GetValue_H(){
+
+            document.getElementById(rowIdx).innerHTML= "H.REL";
+            document.getElementById(rowIdx).className="Blue";
+$(function() {
+                       $.ajax({
+                           url: "/sv/",
+                           async: false,
+                           dataType: "json",
+                           type:"GET",
+                           data: {
+                               docid:rowIdx,
+                               topicid:showval,
+                            <!--   usrid:usrid, -->
+                               val:"H.REL",
+                               color:"Blue"
+                           },
+                           success: function (data) {
+$("#comp").html("completed: "+data.completed+"/"+data.totalnum);
+//$("#nonrelnum").html("NONREL: "+data.nonrelnum);
+//$("#relnum").html("REL: "+data.relnum);
+//$("#hrelnum").html("H.REL: "+data.hrelnum);
+                                $("#Red").attr("value","NONREL: "+data.nonrelnum);
+                                $("#Green").attr("value","REL: "+data.relnum);
+                                $("#Blue").attr("value","H.REL: "+data.hrelnum);
+                                $("#Black").attr("value","ERROR: "+data.errornum);
+                                $("#"+(rowIdx+1)).trigger("click");
+                                window.location.hash="#"+rowIdx
+                           }
+
+                       })
+                   })
+				}
+
+				        function GetValue_E(){
+
+            document.getElementById(rowIdx).innerHTML= "ERROR";
+            document.getElementById(rowIdx).className="Orange";
+$(function() {
+                       $.ajax({
+                           url: "/sv/",
+                           async: false,
+                           dataType: "json",
+                           type:"GET",
+                           data: {
+                               docid:rowIdx,
+                               topicid:showval,
+                            <!--   usrid:usrid, -->
+                               val:"ERROR",
+                               color:"Black"
+                           },
+                           success: function (data) {
+$("#comp").html("completed: "+data.completed+"/"+data.totalnum);
+//$("#nonrelnum").html("NONREL: "+data.nonrelnum);
+//$("#relnum").html("REL: "+data.relnum);
+//$("#hrelnum").html("H.REL: "+data.hrelnum);
+                                $("#Red").attr("value","NONREL: "+data.nonrelnum);
+                                $("#Green").attr("value","REL: "+data.relnum);
+                                $("#Blue").attr("value","H.REL: "+data.hrelnum);
+                                $("#Black").attr("value","ERROR: "+data.errornum);
+                                $("#"+(rowIdx+1)).trigger("click");
+                                window.location.hash="#"+rowIdx
+                           }
+
+                       })
+                   })
+				}
+
+				$(function () {
+   $("#"+(parseInt(backdoor.split("/")[2]))).trigger("click");
+   window.location.hash="#"+rowIdx
+});
+</script>
+
+{% endblock %}

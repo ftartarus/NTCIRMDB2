@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta>
+     {% load staticfiles %}
+    <title>{% block title %} base {% endblock %}</title>
+    <link rel="icon" href="/static/img/IR4.png" type="image/png"/>
+
+    <!-- Loading Bootstrap -->
+    <link href="/static/flat-ui/css/vendor/bootstrap.min.css" rel="stylesheet">
+    <!-- Loading Flat UI -->
+    <link href="/static/flat-ui/css/flat-ui.min.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+
+    <!-- Loading Jquery -->
+    <script src="/static/flat-ui/js/vendor/jquery.min.js"></script>
+    <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+    {% block css %}
+    {% endblock %}
+    </style>
+    <style>html { overflow-x:hidden; }</style>
+</head>
+<body>
+    <header>
+    <div class="container-fluid">
+        <div class="col-xs-12">
+          <nav class="navbar navbar-inverse navbar-embossed" role="navigation">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-01">
+                <span class="sr-only">Toggle navigation</span>
+              </button>
+              <a href="/"><span class="navbar-brand">NTCIR13 www</span></a>
+            </div>
+
+          </nav><!-- /navbar -->
+        </div>
+    </div>
+    </header>
+
+    <section>
+    <div class="container" style="width: 100%">
+            {% block content %}
+                This is content!
+            {% endblock %}
+    </div>
+    </section>
+
+
+    <!--<footer>
+        <div class="container">
+            <div class="row">
+                <p class="text-center">
+                   THUIR 标注平台
+                </p>
+            </div>
+        </div>
+    </footer>-->
+    <script src="/static/flat-ui/js/vendor/jquery.min.js"></script>
+    <script src="/static/flat-ui/js/flat-ui.min.js"></script>
+    {% block scripts %}
+    {% endblock %}
+</body>
+</html>

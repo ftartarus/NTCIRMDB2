@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %} topic  {% endblock %}
+
+{% block content %}
+
+
+	<div class="row clearfix">
+    	<br>
+    	</br>
+    </div>
+
+<div class="container">
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+
+            <table class="table table-hover" id="test" >
+                <tr>
+                <th style="text-align: center; width: 100px; font-size: x-large;" colspan="2">Topic List</th>
+                </tr>
+               {% for m in mark %}
+                <tr>
+
+                    <td width="10%"> {{ m.2 }}/{{ m.3 }}</td>
+                    <td width="90%"><button type="button" id="{{ m.4 }} "  class="btn btn-default btn-block" onclick="jup(this)" >{{ m.0 }}. {{ m.1 }}</button></td>
+                </tr>
+
+                {% endfor %}
+
+            </table>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+   <script>
+function jup(obj){
+   // alert(obj.id);
+    self.location.href=obj.id;
+  }
+
+
+//$(function() {
+ //   $(':button').click(function() {
+   //      alert("1111");
+   //  var   rowIdx = $(this).parent()[0].rowIndex;
+   //  var  getval =document.getElementById(rowIdx).id;
+   //  self.location.href=getval;
+
+  //  });
+// });
+
+
+   </script>
+
+{% endblock %}

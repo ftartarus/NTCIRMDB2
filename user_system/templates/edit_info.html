@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %} Modify User Information  {% endblock %}
+
+{% block content %}
+    <div class="row text-center">
+        <h3>
+            Modify User Information
+        </h3>
+    </div>
+    <div class="row">
+    <div class="col-xs-offset-3 col-xs-6">
+    <div class="login-form">
+        <form id="login_form" name="login_form" action="" method="POST">
+            {% csrf_token %}
+            Email
+            <div class="form-group">
+                 {{ form.email }}
+                <label class="login-field-icon fui-mail"></label>
+            </div>
+            Gender
+            <div class="form-group">
+                {{ form.sex }}
+            </div>
+            Age
+            <div class="form-group">
+                 {{ form.age }}
+                <label class="login-field-icon fui-calendar"></label>
+            </div>
+
+            {% if error_message %}
+            <div class="login_error_message">
+                {{ error_message }}
+            </div>
+            {% endif %}
+
+            <a id="login_button" class="btn btn-primary btn-lg btn-block" href="#">Submit</a>
+        </form>
+    </div>
+    </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        (function() {
+            $('#login_button').click(function(e) {
+                e.preventDefault();
+                document.login_form.submit();
+            });
+        })();
+    </script>
+{% endblock %}

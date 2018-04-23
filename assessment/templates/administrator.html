@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% block title %} Administrator  {% endblock %}
+
+{% block content %}
+
+
+
+<div class="container">
+<div class="row clearfix">
+		<div class="col-md-6 column">
+
+            <p>UserID:
+            <input id='username' type="text" placeholder="user01" /></p>
+		</div>
+
+		<div class="col-md-6 column">
+
+            <p>Topic List:
+            <input id="ulist" type="text" placeholder="1,2,3,4,5"  size="50" onkeyup="this.value=this.value.replace(/[^\r\n0-9\,\，]/g,'');"/>
+            </p>
+		</div>
+	</div>
+{#    <br>#}
+	<div class="row clearfix">
+        <div class="col-md-4 column">
+		</div>
+		<div class="col-md-4 column">
+			 <button type="button" class="btn btn-lg btn-primary btn-block" onclick="update()">Update</button>
+		</div>
+        <div class="col-md-4 column">
+		</div>
+	</div>
+
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+			<div class="row clearfix">
+				<div class="col-md-12 column">
+				</div>
+			</div>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>
+							User
+						</th>
+						<th colspan="2">
+							Process
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+                {% for u in all_multilist %}
+<tr>
+						<td>
+							{{ u.0 }}
+						</td>
+
+						<td>
+
+                           all topics: {{ u.1.0 }}/{{ u.1.1 }}
+						</td>
+
+                        <td>
+                            <table>
+                                {% for i in u.2 %}
+
+                                <tr>
+                                    <td>
+                                    topic{{ i.0 }}: {{ i.1 }}/{{ i.2 }}
+                                    </td>
+                                </tr>
+
+                                {% endfor %}
+                            </table>
+                        </td>
+</tr>
+                {% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+    <div class="row clearfix">
+		<div class="col-md-4 column">
+		</div>
+		<div class="col-md-4 column">
+            <a href="/download/" type="button" class="btn btn-block btn-primary btn-lg">Download</a>
+		</div>
+		<div class="col-md-4 column">
+		</div>
+	</div>
+    <br>
+
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+    function update() {
+        var username = document.getElementById('username').value;
+        var ulist = document.getElementById('ulist').value;
+        if (username == '' || ulist == '') {
+            alert('No Input!');
+        }
+
+        else {
+
+            $(function () {
+                $.ajax({
+                    url: "/st/",
+                    async: false,
+                    dataType: "json",
+                    type: "GET",
+                    data: {
+                        uname: username,
+                        ulist: ulist
+                    }
+                    ,
+                    success: function () {
+
+
+                    }
+                })
+            });
+            alert('complete!');
+        }
+    }
+    </script>
+{% endblock %}
